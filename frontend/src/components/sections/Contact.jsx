@@ -29,7 +29,7 @@ export const Contact = () => {
     e.preventDefault();
     setStatus({ submitting: true, success: false, error: null });
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
     const deviceType = isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
 
     try {

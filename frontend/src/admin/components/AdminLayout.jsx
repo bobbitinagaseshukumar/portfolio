@@ -40,7 +40,7 @@ export const AdminLayout = () => {
 
   const handlePublish = async () => {
     setPublishing(true);
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
     try {
       const res = await fetch(`${backendUrl}/api/admin/publish`, {
         method: 'POST',

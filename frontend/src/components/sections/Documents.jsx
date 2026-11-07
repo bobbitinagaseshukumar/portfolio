@@ -7,6 +7,7 @@ export const Documents = () => {
   const { documents } = usePortfolioData();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [previewItem, setPreviewItem] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   const categories = [
     { id: 'all', label: 'All Documents' },
@@ -107,7 +108,7 @@ export const Documents = () => {
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-3 text-xs">
                   {doc.allowPreview ? (
                     <a
-                      href={`http://localhost:5000${doc.previewUrl}`}
+                      href={`${backendUrl}${doc.previewUrl}`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-medium"
@@ -123,7 +124,7 @@ export const Documents = () => {
 
                   {doc.allowDownload ? (
                     <a
-                      href={`http://localhost:5000${doc.downloadUrl}`}
+                      href={`${backendUrl}${doc.downloadUrl}`}
                       download
                       className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
                       title="Download Document"

@@ -52,7 +52,7 @@ export const AdminLogin = () => {
   const [forgotSuccess, setForgotSuccess] = useState(null);
   const [forgotLoading, setForgotLoading] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   useEffect(() => {
     if (isAuthenticated) {
