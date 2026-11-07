@@ -12,8 +12,14 @@ services:
       - key: PORT
         value: 10000
       - key: FRONTEND_URL
-        sync: false
+        value: https://portfolio-kumar-three.vercel.app
       - key: SUPABASE_URL
-        sync: false
+        value: https://hwxfrbxpbvpsuzdhlbtn.supabase.co
       - key: SUPABASE_ANON_KEY
-        sync: false
+        value: sb_publishable_NHlcynNcKdo128aNfr_oIw_b_qJ_yp8
+      - key: ADMIN_ALLOWED_EMAILS
+        value: nagaseshukumarbobbiti@gmail.com
+      - key: ADMIN_INITIAL_PASSWORD
+        value: seshu@2409
+      - key: SESSION_SECRET
+        generateValue: true

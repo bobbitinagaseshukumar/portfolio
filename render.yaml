@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: portfolio-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: https://portfolio-kumar-three.vercel.app
+      - key: SUPABASE_URL
+        value: https://hwxfrbxpbvpsuzdhlbtn.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: sb_publishable_NHlcynNcKdo128aNfr_oIw_b_qJ_yp8
+      - key: ADMIN_ALLOWED_EMAILS
+        value: nagaseshukumarbobbiti@gmail.com
+      - key: ADMIN_INITIAL_PASSWORD
+        value: seshu@2409
+      - key: SESSION_SECRET
+        generateValue: true
