@@ -34,8 +34,8 @@ export const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [copiedDbString, setCopiedDbString] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-  const dbConnectionString = 'postgresql://postgres:[YOUR-PASSWORD]@db.hwxfrbxpbvpsuzdhlbtn.supabase.co:5432/postgres';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
+  const dbConnectionString = 'postgresql://postgres.hwxfrbxpbvpsuzdhlbtn:[YOUR-PASSWORD]@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
 
   useEffect(() => {
     fetch(`${backendUrl}/api/admin/dashboard`, {
@@ -247,7 +247,7 @@ export const AdminDashboard = () => {
             Edit Profile
           </Link>
           <a
-            href="http://localhost:5173"
+            href="/"
             target="_blank"
             rel="noreferrer"
             className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0"

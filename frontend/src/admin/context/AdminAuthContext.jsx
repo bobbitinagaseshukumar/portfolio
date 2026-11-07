@@ -5,12 +5,20 @@ const AdminAuthContext = createContext(null);
 export const AdminAuthProvider = ({ children }) => {
   const [adminToken, setAdminToken] = useState(() => localStorage.getItem('admin_token'));
   const [adminUser, setAdminUser] = useState(() => {
-    const saved = localStorage.getItem('admin_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('admin_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
   const [otpChallenge, setOtpChallenge] = useState(() => {
-    const saved = sessionStorage.getItem('otp_challenge');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = sessionStorage.getItem('otp_challenge');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState(null);

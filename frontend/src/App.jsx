@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AdminAuthProvider } from './admin/context/AdminAuthContext';
 import { AdminProtectedRoute } from './admin/components/AdminProtectedRoute';
 import { AdminLayout } from './admin/components/AdminLayout';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 // Admin Management Pages
 import { AdminLogin } from './admin/pages/AdminLogin';
@@ -61,41 +62,43 @@ const PublicPortfolio = () => {
 
 export default function App() {
   return (
-    <AdminAuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* 1. Public 3D Cinematic Portfolio */}
-          <Route path="/" element={<PublicPortfolio />} />
+    <ErrorBoundary>
+      <AdminAuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* 1. Public 3D Cinematic Portfolio */}
+            <Route path="/" element={<PublicPortfolio />} />
 
-          {/* 2. Admin Authentication Route */}
-          <Route path="/admin/login" element={<AdminLogin />} />
+            {/* 2. Admin Authentication Route */}
+            <Route path="/admin/login" element={<AdminLogin />} />
 
-          {/* 3. Protected Private Admin Management Portal */}
-          <Route path="/admin" element={<AdminProtectedRoute />}>
-            <Route element={<AdminLayout />}>
-              <Route index element={<Navigate to="/admin/dashboard" replace />} />
-              <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="documents" element={<AdminDocuments />} />
-              <Route path="profile" element={<AdminProfile />} />
-              <Route path="education" element={<AdminEducation />} />
-              <Route path="skills" element={<AdminSkills />} />
-              <Route path="projects" element={<AdminProjects />} />
-              <Route path="experience" element={<AdminExperience />} />
-              <Route path="achievements" element={<AdminAchievements />} />
-              <Route path="certifications" element={<AdminCertifications />} />
-              <Route path="media" element={<AdminMedia />} />
-              <Route path="social-links" element={<AdminSocials />} />
-              <Route path="contact" element={<AdminContactInbox />} />
-              <Route path="website-settings" element={<AdminSettings />} />
-              <Route path="security" element={<AdminSecurity />} />
-              <Route path="activity-logs" element={<AdminActivityLogs />} />
+            {/* 3. Protected Private Admin Management Portal */}
+            <Route path="/admin" element={<AdminProtectedRoute />}>
+              <Route element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="documents" element={<AdminDocuments />} />
+                <Route path="profile" element={<AdminProfile />} />
+                <Route path="education" element={<AdminEducation />} />
+                <Route path="skills" element={<AdminSkills />} />
+                <Route path="projects" element={<AdminProjects />} />
+                <Route path="experience" element={<AdminExperience />} />
+                <Route path="achievements" element={<AdminAchievements />} />
+                <Route path="certifications" element={<AdminCertifications />} />
+                <Route path="media" element={<AdminMedia />} />
+                <Route path="social-links" element={<AdminSocials />} />
+                <Route path="contact" element={<AdminContactInbox />} />
+                <Route path="website-settings" element={<AdminSettings />} />
+                <Route path="security" element={<AdminSecurity />} />
+                <Route path="activity-logs" element={<AdminActivityLogs />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* 4. Fallback Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AdminAuthProvider>
+            {/* 4. Fallback Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AdminAuthProvider>
+    </ErrorBoundary>
   );
 }
