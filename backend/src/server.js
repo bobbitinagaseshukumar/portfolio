@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import apiRoutes from './routes/api.js';
 import adminRoutes from './routes/adminRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
+import { testDbConnection } from './config/db.js';
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server listening on port ${PORT}`);
+  await testDbConnection();
 });
