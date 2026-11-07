@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm --prefix backend install",
+    "dev": "node backend/src/server.js",
     "start": "node backend/src/server.js",
+    "build": "npm --prefix backend install",
     "server": "node backend/src/server.js",
-    "server:dev": "npm --prefix backend run dev",
+    "server:dev": "node backend/src/server.js",
     "frontend:install": "npm --prefix frontend install",
     "frontend:build": "npm --prefix frontend install && npm --prefix frontend run build",
     "frontend:dev": "npm --prefix frontend run dev",

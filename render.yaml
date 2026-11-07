@@ -3,9 +3,8 @@ services:
     name: portfolio-backend
     env: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: npm --prefix backend install
+    startCommand: node backend/src/server.js
     envVars:
       - key: NODE_ENV
         value: production
