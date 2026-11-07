@@ -64,7 +64,7 @@ export const AdminDocuments = () => {
   const [previewDoc, setPreviewDoc] = useState(null);
 
   const fileInputRef = useRef(null);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   const categories = [
     { id: 'all', label: 'All Files' },

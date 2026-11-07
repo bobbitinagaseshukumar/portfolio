@@ -164,19 +164,183 @@ export const deleteAdminProject = async (req, res) => {
   return res.status(200).json({ success: true, message: "Project deleted." });
 };
 
-// ---------------- CERTIFICATIONS & ACHIEVEMENTS ----------------
-export const getAdminCertifications = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.certifications });
-export const updateAdminCertifications = async (req, res) => {
-  portfolioStore.certifications = req.body;
-  logAuditAction(req.adminUser?.email, "CERTIFICATIONS_UPDATED", "CERTIFICATIONS", "all");
-  return res.status(200).json({ success: true, message: "Certifications updated.", data: portfolioStore.certifications });
+// ---------------- CERTIFICATIONS ----------------
+export const getAdminCertifications = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.certifications || [] });
+export const addAdminCertification = async (req, res) => {
+  const newCert = {
+    id: `cert-${Date.now()}`,
+    isPublished: true,
+    displayOrder: (portfolioStore.certifications?.length || 0) + 1,
+    ...req.body
+  };
+  portfolioStore.certifications = portfolioStore.certifications || [];
+  portfolioStore.certifications.push(newCert);
+  logAuditAction(req.adminUser?.email, "CERTIFICATION_ADDED", "CERTIFICATION", newCert.id, newCert);
+  return res.status(201).json({ success: true, message: "Certification added.", data: newCert });
+};
+export const updateAdminCertification = async (req, res) => {
+  const { id } = req.params;
+  const list = portfolioStore.certifications || [];
+  const idx = list.findIndex(c => c.id === id);
+  if (idx !== -1) {
+    list[idx] = { ...list[idx], ...req.body };
+    logAuditAction(req.adminUser?.email, "CERTIFICATION_UPDATED", "CERTIFICATION", id, req.body);
+    return res.status(200).json({ success: true, message: "Certification updated.", data: list[idx] });
+  }
+  return res.status(404).json({ success: false, error: "Certification not found." });
+};
+export const deleteAdminCertification = async (req, res) => {
+  const { id } = req.params;
+  portfolioStore.certifications = (portfolioStore.certifications || []).filter(c => c.id !== id);
+  logAuditAction(req.adminUser?.email, "CERTIFICATION_DELETED", "CERTIFICATION", id);
+  return res.status(200).json({ success: true, message: "Certification deleted." });
 };
 
-export const getAdminAchievements = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.achievements });
-export const updateAdminAchievements = async (req, res) => {
-  portfolioStore.achievements = req.body;
-  logAuditAction(req.adminUser?.email, "ACHIEVEMENTS_UPDATED", "ACHIEVEMENTS", "all");
-  return res.status(200).json({ success: true, message: "Achievements updated.", data: portfolioStore.achievements });
+// ---------------- ACHIEVEMENTS ----------------
+export const getAdminAchievements = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.achievements || [] });
+export const addAdminAchievement = async (req, res) => {
+  const newAch = {
+    id: `ach-${Date.now()}`,
+    isPublished: true,
+    displayOrder: (portfolioStore.achievements?.length || 0) + 1,
+    ...req.body
+  };
+  portfolioStore.achievements = portfolioStore.achievements || [];
+  portfolioStore.achievements.push(newAch);
+  logAuditAction(req.adminUser?.email, "ACHIEVEMENT_ADDED", "ACHIEVEMENT", newAch.id, newAch);
+  return res.status(201).json({ success: true, message: "Achievement added.", data: newAch });
+};
+export const updateAdminAchievement = async (req, res) => {
+  const { id } = req.params;
+  const list = portfolioStore.achievements || [];
+  const idx = list.findIndex(a => a.id === id);
+  if (idx !== -1) {
+    list[idx] = { ...list[idx], ...req.body };
+    logAuditAction(req.adminUser?.email, "ACHIEVEMENT_UPDATED", "ACHIEVEMENT", id, req.body);
+    return res.status(200).json({ success: true, message: "Achievement updated.", data: list[idx] });
+  }
+  return res.status(404).json({ success: false, error: "Achievement not found." });
+};
+export const deleteAdminAchievement = async (req, res) => {
+  const { id } = req.params;
+  portfolioStore.achievements = (portfolioStore.achievements || []).filter(a => a.id !== id);
+  logAuditAction(req.adminUser?.email, "ACHIEVEMENT_DELETED", "ACHIEVEMENT", id);
+  return res.status(200).json({ success: true, message: "Achievement deleted." });
+};
+
+// ---------------- EXPERIENCES & INTERNSHIPS ----------------
+export const getAdminExperiences = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.experiences || [] });
+export const addAdminExperience = async (req, res) => {
+  const newExp = {
+    id: `exp-${Date.now()}`,
+    isPublished: true,
+    displayOrder: (portfolioStore.experiences?.length || 0) + 1,
+    ...req.body
+  };
+  portfolioStore.experiences = portfolioStore.experiences || [];
+  portfolioStore.experiences.push(newExp);
+  logAuditAction(req.adminUser?.email, "EXPERIENCE_ADDED", "EXPERIENCE", newExp.id, newExp);
+  return res.status(201).json({ success: true, message: "Experience record added.", data: newExp });
+};
+export const updateAdminExperience = async (req, res) => {
+  const { id } = req.params;
+  const list = portfolioStore.experiences || [];
+  const idx = list.findIndex(e => e.id === id);
+  if (idx !== -1) {
+    list[idx] = { ...list[idx], ...req.body };
+    logAuditAction(req.adminUser?.email, "EXPERIENCE_UPDATED", "EXPERIENCE", id, req.body);
+    return res.status(200).json({ success: true, message: "Experience record updated.", data: list[idx] });
+  }
+  return res.status(404).json({ success: false, error: "Experience record not found." });
+};
+export const deleteAdminExperience = async (req, res) => {
+  const { id } = req.params;
+  portfolioStore.experiences = (portfolioStore.experiences || []).filter(e => e.id !== id);
+  logAuditAction(req.adminUser?.email, "EXPERIENCE_DELETED", "EXPERIENCE", id);
+  return res.status(200).json({ success: true, message: "Experience record deleted." });
+};
+
+// ---------------- SOCIAL LINKS ----------------
+export const getAdminSocialLinks = async (req, res) => res.status(200).json({ success: true, data: portfolioStore.socialLinks || [] });
+export const addAdminSocialLink = async (req, res) => {
+  const newSocial = {
+    id: `soc-${Date.now()}`,
+    isEnabled: true,
+    ...req.body
+  };
+  portfolioStore.socialLinks = portfolioStore.socialLinks || [];
+  portfolioStore.socialLinks.push(newSocial);
+  logAuditAction(req.adminUser?.email, "SOCIAL_LINK_ADDED", "SOCIAL", newSocial.id, newSocial);
+  return res.status(201).json({ success: true, message: "Social link added.", data: newSocial });
+};
+export const updateAdminSocialLink = async (req, res) => {
+  const { id } = req.params;
+  const list = portfolioStore.socialLinks || [];
+  const idx = list.findIndex(s => s.id === id);
+  if (idx !== -1) {
+    list[idx] = { ...list[idx], ...req.body };
+    logAuditAction(req.adminUser?.email, "SOCIAL_LINK_UPDATED", "SOCIAL", id, req.body);
+    return res.status(200).json({ success: true, message: "Social link updated.", data: list[idx] });
+  }
+  return res.status(404).json({ success: false, error: "Social link not found." });
+};
+export const deleteAdminSocialLink = async (req, res) => {
+  const { id } = req.params;
+  portfolioStore.socialLinks = (portfolioStore.socialLinks || []).filter(s => s.id !== id);
+  logAuditAction(req.adminUser?.email, "SOCIAL_LINK_DELETED", "SOCIAL", id);
+  return res.status(200).json({ success: true, message: "Social link deleted." });
+};
+
+// ---------------- PURGE ALL PREVIOUS CONTENTS (Clean Reset) ----------------
+export const purgePreviousContents = async (req, res) => {
+  portfolioStore.education = [];
+  portfolioStore.skills = [];
+  portfolioStore.projects = [];
+  portfolioStore.experiences = [];
+  portfolioStore.certifications = [];
+  portfolioStore.achievements = [];
+  portfolioStore.socialLinks = [];
+  
+  // Reset profile to clean Nagaseshu Kumar Bobbiti baseline with zero fake data
+  portfolioStore.profile = {
+    fullName: "Nagaseshu Kumar Bobbiti",
+    displayName: "Kumar",
+    developerTitle: "",
+    shortIntro: "",
+    biography: "",
+    email: "nagaseshukumarbobbiti@gmail.com",
+    phone: "",
+    location: "India",
+    country: "India",
+    currentRole: "",
+    specialization: "",
+    learningFocus: "",
+    careerObjective: "",
+    availability: "available",
+    githubUrl: "",
+    linkedinUrl: "",
+    twitterUrl: "",
+    collegeName: "",
+    schoolName: "",
+    degree: "",
+    branch: "",
+    academicYear: "",
+    startYear: "",
+    completionYear: "",
+    cgpa: "",
+    academicDescription: "",
+    isPublished: true
+  };
+
+  logAuditAction(req.adminUser?.email, "DATABASE_PURGED", "SYSTEM", "all", {
+    reason: "User requested clean database wipe of all previous contents."
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "🧹 Clean database wipe completed! All previous contents removed. System is ready for your real content.",
+    data: portfolioStore
+  });
 };
 
 // ---------------- SETTINGS ----------------

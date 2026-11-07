@@ -8,7 +8,7 @@ export const AdminProfile = () => {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState('personal');
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   useEffect(() => {
     fetch(`${backendUrl}/api/admin/profile`, {

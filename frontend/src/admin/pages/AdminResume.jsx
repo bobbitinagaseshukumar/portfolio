@@ -7,7 +7,7 @@ export const AdminResume = () => {
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState(null);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   useEffect(() => {
     fetch(`${backendUrl}/api/admin/resume`, {

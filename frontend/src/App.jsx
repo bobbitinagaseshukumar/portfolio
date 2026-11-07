@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AdminAuthProvider } from './admin/context/AdminAuthContext';
+import { AdminThemeProvider } from './admin/context/AdminThemeContext';
 import { AdminProtectedRoute } from './admin/components/AdminProtectedRoute';
 import { AdminLayout } from './admin/components/AdminLayout';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -64,7 +65,8 @@ export default function App() {
   return (
     <ErrorBoundary>
       <AdminAuthProvider>
-        <BrowserRouter>
+        <AdminThemeProvider>
+          <BrowserRouter>
           <Routes>
             {/* 1. Public 3D Cinematic Portfolio */}
             <Route path="/" element={<PublicPortfolio />} />
@@ -98,7 +100,8 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
-      </AdminAuthProvider>
-    </ErrorBoundary>
+      </AdminThemeProvider>
+    </AdminAuthProvider>
+  </ErrorBoundary>
   );
 }

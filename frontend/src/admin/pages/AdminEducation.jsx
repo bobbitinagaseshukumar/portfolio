@@ -28,7 +28,7 @@ export const AdminEducation = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
 
   const fetchEducation = () => {
     fetch(`${backendUrl}/api/admin/education`, {

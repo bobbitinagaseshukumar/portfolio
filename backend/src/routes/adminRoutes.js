@@ -28,14 +28,28 @@ import {
   updateAdminProject,
   deleteAdminProject,
   getAdminCertifications,
-  updateAdminCertifications,
+  addAdminCertification,
+  updateAdminCertification,
+  deleteAdminCertification,
   getAdminAchievements,
-  updateAdminAchievements,
+  addAdminAchievement,
+  updateAdminAchievement,
+  deleteAdminAchievement,
+  getAdminExperiences,
+  addAdminExperience,
+  updateAdminExperience,
+  deleteAdminExperience,
+  getAdminSocialLinks,
+  addAdminSocialLink,
+  updateAdminSocialLink,
+  deleteAdminSocialLink,
+  purgePreviousContents,
   getAdminSettings,
   updateAdminSettings,
   getAdminAuditLogs,
   publishWebsiteContent
 } from '../controllers/adminContentController.js';
+import { getContactMessages } from '../controllers/contactController.js';
 import {
   getAdminDocuments,
   uploadAdminDocument,
@@ -98,11 +112,35 @@ router.post('/projects', requireAdminAuth, addAdminProject);
 router.put('/projects/:id', requireAdminAuth, updateAdminProject);
 router.delete('/projects/:id', requireAdminAuth, deleteAdminProject);
 
-// --- CERTIFICATIONS & ACHIEVEMENTS ---
+// --- CERTIFICATIONS ---
 router.get('/certifications', requireAdminAuth, getAdminCertifications);
-router.put('/certifications', requireAdminAuth, updateAdminCertifications);
+router.post('/certifications', requireAdminAuth, addAdminCertification);
+router.put('/certifications/:id', requireAdminAuth, updateAdminCertification);
+router.delete('/certifications/:id', requireAdminAuth, deleteAdminCertification);
+
+// --- ACHIEVEMENTS ---
 router.get('/achievements', requireAdminAuth, getAdminAchievements);
-router.put('/achievements', requireAdminAuth, updateAdminAchievements);
+router.post('/achievements', requireAdminAuth, addAdminAchievement);
+router.put('/achievements/:id', requireAdminAuth, updateAdminAchievement);
+router.delete('/achievements/:id', requireAdminAuth, deleteAdminAchievement);
+
+// --- EXPERIENCES & INTERNSHIPS ---
+router.get('/experiences', requireAdminAuth, getAdminExperiences);
+router.post('/experiences', requireAdminAuth, addAdminExperience);
+router.put('/experiences/:id', requireAdminAuth, updateAdminExperience);
+router.delete('/experiences/:id', requireAdminAuth, deleteAdminExperience);
+
+// --- SOCIAL LINKS ---
+router.get('/social-links', requireAdminAuth, getAdminSocialLinks);
+router.post('/social-links', requireAdminAuth, addAdminSocialLink);
+router.put('/social-links/:id', requireAdminAuth, updateAdminSocialLink);
+router.delete('/social-links/:id', requireAdminAuth, deleteAdminSocialLink);
+
+// --- CONTACT INBOX MESSAGES ---
+router.get('/contact-messages', requireAdminAuth, getContactMessages);
+
+// --- PURGE ALL PREVIOUS CONTENTS (Clean Reset) ---
+router.post('/purge-database', requireAdminAuth, purgePreviousContents);
 
 // --- WEBSITE SETTINGS ---
 router.get('/settings', requireAdminAuth, getAdminSettings);

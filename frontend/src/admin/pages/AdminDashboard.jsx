@@ -24,20 +24,30 @@ import {
   FileCheck,
   ShieldAlert,
   Copy,
-  Check
+  Check,
+  Trash2,
+  AlertTriangle,
+  RotateCcw
 } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
+import { useAdminTheme } from '../context/AdminThemeContext';
+import { Admin3DHeroWidget } from '../components/Admin3DHeroWidget';
 
 export const AdminDashboard = () => {
   const { adminUser } = useAdminAuth();
+  const { theme } = useAdminTheme();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copiedDbString, setCopiedDbString] = useState(false);
+  const [purging, setPurging] = useState(false);
+  const [purgeSuccess, setPurgeSuccess] = useState(false);
+  const [showPurgeModal, setShowPurgeModal] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://portfolio-zsk2.onrender.com';
   const dbConnectionString = 'postgresql://postgres.hwxfrbxpbvpsuzdhlbtn:[YOUR-PASSWORD]@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres';
 
-  useEffect(() => {
+  const fetchStats = () => {
+    setLoading(true);
     fetch(`${backendUrl}/api/admin/dashboard`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('admin_token')}` }
     })
@@ -47,7 +57,34 @@ export const AdminDashboard = () => {
       })
       .catch((err) => console.warn(err))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchStats();
   }, []);
+
+  const handlePurgeDatabase = async () => {
+    setPurging(true);
+    try {
+      const res = await fetch(`${backendUrl}/api/admin/purge-database`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('admin_token')}`
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPurgeSuccess(true);
+        setShowPurgeModal(false);
+        fetchStats();
+        setTimeout(() => setPurgeSuccess(false), 4000);
+      }
+    } catch (err) {
+      console.warn('Purge error:', err);
+    } finally {
+      setPurging(false);
+    }
+  };
 
   const handleCopyDb = () => {
     navigator.clipboard.writeText(dbConnectionString);
@@ -223,8 +260,11 @@ export const AdminDashboard = () => {
   return (
     <div className="space-y-8">
       
+      {/* 3D Telemetry & Core Engine Hero Banner */}
+      <Admin3DHeroWidget />
+
       {/* Welcome Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111422] to-[#151928] border border-slate-800 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111422]/90 to-[#151928]/90 border border-slate-800/80 backdrop-blur-xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono mb-3 border border-emerald-500/20">
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -238,10 +278,11 @@ export const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link
             to="/admin/profile"
             className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0 shadow-md shadow-indigo-600/30"
+            style={{ backgroundColor: theme.primary }}
           >
             <User className="w-4 h-4" />
             Edit Profile
@@ -250,13 +291,67 @@ export const AdminDashboard = () => {
             href="/"
             target="_blank"
             rel="noreferrer"
-            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0"
+            className="px-4 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0"
           >
             <ExternalLink className="w-4 h-4" />
             View Live Site
           </a>
+          <button
+            onClick={() => setShowPurgeModal(true)}
+            className="px-3.5 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 hover:text-rose-200 text-xs font-medium flex items-center gap-2 transition-colors shrink-0"
+            title="Clean purge of previous data"
+          >
+            <Trash2 className="w-4 h-4 text-rose-400" />
+            <span className="hidden sm:inline">Purge Old Data</span>
+          </button>
         </div>
       </div>
+
+      {/* Purge Success Banner */}
+      {purgeSuccess && (
+        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-3 animate-in fade-in">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+          <span>Database successfully purged! All previous test content removed. Ready for your pristine records.</span>
+        </div>
+      )}
+
+      {/* Confirmation Modal for Purge */}
+      {showPurgeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-[#121524] border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-rose-400">
+              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Purge Previous Database Contents?</h3>
+                <p className="text-xs text-slate-400">Clean slate re-initialization</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              This will remove all previous dummy/test projects, unverified skills, and placeholder education records from the store, leaving a 100% clean database state with zero fake data.
+            </p>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => setShowPurgeModal(false)}
+                className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePurgeDatabase}
+                disabled={purging}
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-rose-600/30"
+              >
+                {purging ? <RotateCcw className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                <span>{purging ? 'Purging...' : 'Confirm Purge'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ======================================================== */}
       {/* 📦 SEPARATE SECTION BOXES FOR EACH PORTFOLIO SECTION    */}
@@ -281,7 +376,7 @@ export const AdminDashboard = () => {
           {sectionBoxes.map((box) => (
             <div
               key={box.id}
-              className="p-5 rounded-2xl bg-[#0e111a] border border-slate-800 hover:border-indigo-500/40 transition-all flex flex-col justify-between group shadow-sm hover:shadow-indigo-500/5"
+              className="p-5 rounded-2xl bg-[#0c0f1a]/85 backdrop-blur-xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
